@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative;
+            background: linear-gradient(to right, #000000, #00008b); /* Black to dark blue gradient from left to right */
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px; /* Added margin to separate from the content below */
+        }
+
+        .list-container {
+            background-color: #0000ff38;
+            /* Light purple */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            /* Ensure the list container appears above the graffiti text */
+        }
+        .list-container2 {
+            background-color: #0000ff38;
+            /* Light purple */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            /* Ensure the list container appears above the graffiti text */
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input[type="text"],
+        button {
+            color: black;
+            /* Font color changed to black */
+            background-color: #ffffff;
+            /* Green */
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="text"] {
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        ul {
+            list-style-type: square;
+            /* Square bullets */
+            padding-left: 0;
+            background-color: #ffffff;
+            /* Light purple */
+            margin-top: 10px;
+            /* Added margin for spacing */
+            padding: 10px;
+            /* Added padding for spacing */
+        }
+
+        input[type="time"] {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    </style>
+    <title>To Do List</title>
+</head>
+
+<body>
+    <div class="container">
+    <h1>To Do List</h1>
+
+    <div class="list-container">
+        <body>
+        <h1>
+            <%= KindOfDay %>
+        </h1>
+
+        <ul id="todoList">
+            <% for(i=0; i < newListItems.length; i++){ %>
+            <li>
+                <input type="checkbox" id="addItemForm">
+                <%= i %>">
+                <label for="addItemForm">
+                    <%= i %>">
+                        <%= newListItems[i].item %> - From <%= newListItems[i].fromTime %> to <%= newListItems[i].toTime %>
+                </label>
+            </li>
+            <% } %>
+        </ul>
+
+        <form id="addItemForm" action="/" method="post">
+            <input type="text" id="newItem" name="newItem" autocomplete="off" placeholder="Task">
+            <input type="time" id="fromTime" name="fromTime"> -
+            <input type="time" id="toTime" name="toTime">
+            <button type="submit">Add</button>
+        </form>
+
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const todoList = document.getElementById('todoList');
+            const addItemForm = document.getElementById('addItemForm');
+
+            // Function to add a new item to the list
+            addItemForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                const newItemInput = document.getElementById('newItem');
+                const newItemValue = newItemInput.value.trim();
+
+                if (newItemValue !== '') {
+                    const fromTimeInput = document.getElementById('fromTime');
+                    const fromTimeValue = fromTimeInput.value;
+                    const toTimeInput = document.getElementById('toTime');
+                    const toTimeValue = toTimeInput.value;
+                    const newItemId = 'item' + todoList.children.length;
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <input type="checkbox" id="${newItemId}">
+                        <label for="${newItemId}">${newItemValue} - From ${fromTimeValue} to ${toTimeValue}</label>
+                    `;
+                    todoList.appendChild(listItem);
+                    newItemInput.value = ''; // Clear input field
+                }
+            });
+
+            // Function to strike through the item when its checkbox is clicked
+            todoList.addEventListener('click', function (event) {
+                if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
+                    const label = event.target.nextElementSibling;
+                    label.classList.toggle('strikethrough');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
